@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block page_id %}home{% endblock %}
+
+{% block content %}
+
+<!-- ===================== HERO SECTION ===================== -->
+<section class="hero">
+  <div class="container hero-inner">
+
+    <div class="hero-text">
+      <span class="hero-eyebrow">{{ restaurant.tagline }}</span>
+      <h1>Good Food, Made with Love</h1>
+      <p class="hero-description">
+        Welcome to {{ restaurant.name }}, a warm little corner for fresh pizzas, creamy pastas,
+        crispy snacks and comforting coffee. Everything on our menu is vegetarian and made
+        to turn an ordinary day into a good one.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="{{ url_for('menu') }}" class="btn btn-primary">Explore Menu</a>
+        <a href="{{ url_for('menu') }}#menu-grid" class="btn btn-outline">Order Now</a>
+      </div>
+
+      <ul class="hero-highlights">
+        <li>&#127811; 100% Vegetarian</li>
+        <li>&#127829; Freshly prepared</li>
+        <li>&#127873; {{ discount_percent }}% off orders of &#8377;{{ min_discount_amount }}+</li>
+      </ul>
+    </div>
+
+    <div class="hero-image">
+      <img class="food-img" src="{{ url_for('static', filename='images/hero.jpg') }}"
+           alt="A table with freshly served pizza, pasta and coffee">
+    </div>
+
+  </div>
+</section>
+
+<!-- ===================== POPULAR ITEMS ===================== -->
+<section class="section popular">
+  <div class="container">
+    <div class="section-heading">
+      <span class="section-eyebrow">Customer Favourites</span>
+      <h2>Popular Right Now</h2>
+      <p>A few dishes that our guests keep coming back for.</p>
+    </div>
+
+    <div class="food-grid">
+      {% for item in popular %}
+        {% include "_food_card.html" %}
+      {% endfor %}
+    </div>
+
+    <div class="section-action">
+      <a href="{{ url_for('menu') }}" class="btn btn-outline">View Full Menu</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ABOUT SECTION ===================== -->
+<section class="section about" id="about">
+  <div class="container about-inner">
+
+    <div class="about-image">
+      <img class="food-img" src="{{ url_for('static', filename='images/about.jpg') }}"
+           alt="The cosy interior of {{ restaurant.name }}">
+    </div>
+
+    <div class="about-text">
+      <span class="section-eyebrow">Our Story</span>
+      <h2>About {{ restaurant.name }}</h2>
+      <p>
+        {{ restaurant.name }} began with a simple idea: good food tastes even better
+        when it is served in a place that feels like home. We keep our menu short, our
+        ingredients fresh and our flavours honest.
+      </p>
+      <p>
+        Whether you are here for a quick coffee, a cheesy slice of pizza or a relaxed meal
+        with friends, we want every visit to leave you with a full stomach and a good mood.
+      </p>
+      <p class="about-note">
+        This is a demo restaurant created for a project.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===================== CONTACT SECTION ===================== -->
+<section class="section contact" id="contact">
+  <div class="container">
+    <div class="section-heading">
+      <span class="section-eyebrow">Get in Touch</span>
+      <h2>Contact &amp; Opening Hours</h2>
+      <p class="sample-note">All the details below are sample (fictional) information.</p>
+    </div>
+
+    <div class="contact-grid">
+
+      <div class="contact-card">
+        <h3>&#128205; Address</h3>
+        <p>{{ restaurant.address }}</p>
+      </div>
+
+      <div class="contact-card">
+        <h3>&#128222; Phone</h3>
+        <p>{{ restaurant.phone }}</p>
+      </div>
+
+      <div class="contact-card">
+        <h3>&#9993;&#65039; Email</h3>
+        <p>{{ restaurant.email }}</p>
+      </div>
+
+      <div class="contact-card">
+        <h3>&#128339; Opening Hours</h3>
+        <ul class="hours-list">
+          {% for slot in restaurant.hours %}
+          <li><span>{{ slot.days }}</span> <strong>{{ slot.time }}</strong></li>
+          {% endfor %}
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}

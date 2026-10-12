@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="{{ restaurant.name }} - {{ restaurant.tagline }} Browse our menu and build your order online. Demo project.">
+  <title>{% block title %}{{ restaurant.name }} | {{ restaurant.tagline }}{% endblock %}</title>
+
+  <!-- Google Fonts: Playfair Display (headings) and Poppins (body text) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Main stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<!--
+  The data-* attributes below pass server settings to script.js,
+  so we never need to write JavaScript inside the HTML.
+-->
+<body
+  data-page="{% block page_id %}{% endblock %}"
+  data-bill-url="{{ url_for('api_bill') }}"
+  data-order-url="{{ url_for('api_place_order') }}"
+  data-max-qty="{{ max_quantity }}"
+  data-min-discount="{{ min_discount_amount }}"
+  data-discount-percent="{{ discount_percent }}">
+
+  <!-- ===================== NAVIGATION BAR ===================== -->
+  <header class="site-header">
+    <nav class="navbar container" aria-label="Main navigation">
+
+      <a href="{{ url_for('home') }}" class="logo">
+        <span class="logo-mark">&#127807;</span>
+        <span class="logo-text">{{ restaurant.name }}</span>
+      </a>
+
+      <!-- Hamburger button (visible on mobile only) -->
+      <button class="nav-toggle" id="nav-toggle" type="button"
+              aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-links">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <ul class="nav-links" id="nav-links">
+        <li><a href="{{ url_for('home') }}" class="{% if request.endpoint == 'home' %}active{% endif %}">Home</a></li>
+        <li><a href="{{ url_for('menu') }}" class="{% if request.endpoint == 'menu' %}active{% endif %}">Menu</a></li>
+        <li><a href="{{ url_for('home') }}#about">About</a></li>
+        <li><a href="{{ url_for('home') }}#contact">Contact</a></li>
+      </ul>
+
+      <!-- Cart icon with item count (script.js updates #cart-count) -->
+      <a href="{{ url_for('cart') }}" class="cart-link" aria-label="View cart">
+        <svg class="cart-icon" viewBox="0 0 24 24" width="24" height="24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+        <span class="cart-count" id="cart-count">0</span>
+      </a>
+
+    </nav>
+  </header>
+
+  <!-- ===================== PAGE CONTENT ===================== -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+
+      <div class="footer-brand">
+        <a href="{{ url_for('home') }}" class="logo">
+          <span class="logo-mark">&#127807;</span>
+          <span class="logo-text">{{ restaurant.name }}</span>
+        </a>
+        <p class="footer-tagline">{{ restaurant.tagline }}</p>
+      </div>
+
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="{{ url_for('home') }}">Home</a></li>
+          <li><a href="{{ url_for('menu') }}">Menu</a></li>
+          <li><a href="{{ url_for('home') }}#about">About</a></li>
+          <li><a href="{{ url_for('home') }}#contact">Contact</a></li>
+          <li><a href="{{ url_for('cart') }}">Cart</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-hours">
+        <h4>Opening Hours</h4>
+        <ul>
+          {% for slot in restaurant.hours %}
+          <li><span>{{ slot.days }}</span> <strong>{{ slot.time }}</strong></li>
+          {% endfor %}
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container">
+        <p>This is a demo project. The contact details and opening hours are fictional, and orders are not real.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Small popup message (script.js shows it when an item is added) -->
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <!-- Main JavaScript (defer = run after the page has loaded) -->
+  <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
+</body>
+</html>

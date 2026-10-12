@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout | {{ restaurant.name }}{% endblock %}
+
+{% block page_id %}checkout{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+  <div class="container">
+    <h1>Checkout</h1>
+    <p>Review your order and place it. This is a demo, so no payment is taken.</p>
+  </div>
+</section>
+
+<section class="section checkout-section">
+  <div class="container">
+
+    <p class="status-message" id="checkout-loading">Loading your order...</p>
+
+    <!-- Shown if the server returns an error -->
+    <p class="error-message" id="checkout-error" role="alert" hidden></p>
+
+    <!-- Shown when there is nothing to check out -->
+    <div class="empty-state" id="checkout-empty" hidden>
+      <div class="empty-icon">&#128722;</div>
+      <h2>Nothing to check out yet</h2>
+      <p>Your cart is empty. Add some dishes from the menu first.</p>
+      <a href="{{ url_for('menu') }}" class="btn btn-primary">Browse Menu</a>
+    </div>
+
+    <!-- ============ ORDER REVIEW (before placing the order) ============ -->
+    <div class="checkout-layout" id="checkout-content" hidden>
+
+      <div class="order-items-card">
+        <h2>Order Summary</h2>
+        <!-- script.js creates one row per item: name, quantity x price, and line total -->
+        <ul class="order-items" id="checkout-items"></ul>
+        <a href="{{ url_for('cart') }}" class="btn btn-ghost">&larr; Edit Cart</a>
+      </div>
+
+      <aside class="summary-card" aria-label="Final bill">
+        <h2>Final Bill</h2>
+
+        <dl class="summary-list">
+          <div class="summary-row">
+            <dt>Subtotal</dt>
+            <dd>&#8377;<span data-bill="subtotal">0.00</span></dd>
+          </div>
+          <div class="summary-row summary-discount">
+            <dt>Discount ({{ discount_percent }}%)</dt>
+            <dd>- &#8377;<span data-bill="discount">0.00</span></dd>
+          </div>
+          <div class="summary-row">
+            <dt>Tax ({{ tax_percent }}%)</dt>
+            <dd>&#8377;<span data-bill="tax">0.00</span></dd>
+          </div>
+          <div class="summary-row summary-total">
+            <dt>Total Payable</dt>
+            <dd>&#8377;<span data-bill="final_total">0.00</span></dd>
+          </div>
+        </dl>
+
+        <p class="discount-hint" data-discount-hint></p>
+
+        <button type="button" class="btn btn-primary btn-block" id="place-order">Place Order</button>
+        <p class="summary-note">
+          Demo only: no real payment is taken, nothing is stored on a server
+          and no food will be delivered.
+        </p>
+      </aside>
+
+    </div>
+
+    <!-- ============ ORDER CONFIRMATION (after placing the order) ============ -->
+    <div class="confirmation" id="order-confirmation" hidden>
+      <div class="confirmation-icon">&#10003;</div>
+      <h2>Order Placed!</h2>
+      <p class="confirmation-number">Your sample order number is <strong id="order-number"></strong></p>
+      <p class="confirmation-message" id="order-message"></p>
+
+      <div class="confirmation-bill">
+        <h3>Your Bill</h3>
+        <ul class="order-items" id="confirmation-items"></ul>
+        <p class="confirmation-total">
+          Total paid (sample): &#8377;<strong id="confirmation-total">0.00</strong>
+        </p>
+      </div>
+
+      <a href="{{ url_for('menu') }}" class="btn btn-primary">Order Something Else</a>
+      <a href="{{ url_for('home') }}" class="btn btn-outline">Back to Home</a>
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,38 @@
+<!--
+  One food card. This file is included inside a loop,
+  so the variable "item" comes from the page that includes it.
+  The data-* attributes are used by script.js for search, filters and Add to Cart.
+-->
+<article class="food-card"
+         data-key="{{ item.key }}"
+         data-category="{{ item.category }}"
+         data-search="{{ (item.name ~ ' ' ~ item.category ~ ' ' ~ item.description)|lower }}">
+
+  <div class="food-card__image">
+    <img class="food-img"
+         src="{{ url_for('static', filename='images/' ~ item.image) }}"
+         alt="{{ item.name }}"
+         loading="lazy">
+
+    <!-- Veg / non-veg mark -->
+    <span class="diet-badge {{ 'veg' if item.veg else 'non-veg' }}"
+          title="{{ 'Vegetarian' if item.veg else 'Non-vegetarian' }}"
+          aria-label="{{ 'Vegetarian' if item.veg else 'Non-vegetarian' }}">
+      <span class="diet-dot"></span>
+    </span>
+  </div>
+
+  <div class="food-card__body">
+    <span class="food-card__category">{{ item.category }}</span>
+    <h3 class="food-card__title">{{ item.name }}</h3>
+    <p class="food-card__desc">{{ item.description }}</p>
+
+    <div class="food-card__footer">
+      <span class="food-card__price">&#8377;{{ item.price }}</span>
+      <button class="btn btn-primary btn-add" type="button" data-key="{{ item.key }}">
+        Add to Cart
+      </button>
+    </div>
+  </div>
+
+</article>

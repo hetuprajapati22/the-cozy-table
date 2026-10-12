@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Your Cart | {{ restaurant.name }}{% endblock %}
+
+{% block page_id %}cart{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+  <div class="container">
+    <h1>Your Cart</h1>
+    <p>Change quantities, remove items and check your bill before checkout.</p>
+  </div>
+</section>
+
+<section class="section cart-section">
+  <div class="container">
+
+    <!-- Shown briefly while the bill is being loaded from the server -->
+    <p class="status-message" id="cart-loading">Loading your cart...</p>
+
+    <!-- Shown if the server returns an error -->
+    <p class="error-message" id="cart-error" role="alert" hidden></p>
+
+    <!-- Shown when the cart is empty -->
+    <div class="empty-state" id="cart-empty" hidden>
+      <div class="empty-icon">&#128722;</div>
+      <h2>Your cart is empty</h2>
+      <p>Looks like you have not added anything yet. Explore our menu and pick something tasty.</p>
+      <a href="{{ url_for('menu') }}" class="btn btn-primary">Browse Menu</a>
+    </div>
+
+    <!-- Shown when the cart has items -->
+    <div class="cart-layout" id="cart-content" hidden>
+
+      <!--
+        Cart items list. script.js creates one row for each item:
+        image, name, price, - / + buttons, line total and a remove button.
+      -->
+      <div class="cart-list-wrapper">
+        <ul class="cart-list" id="cart-items"></ul>
+
+        <div class="cart-actions">
+          <a href="{{ url_for('menu') }}" class="btn btn-outline">+ Add More Items</a>
+          <button type="button" class="btn btn-ghost" id="clear-cart">Clear Cart</button>
+        </div>
+      </div>
+
+      <!-- Bill summary (numbers come from the Flask server) -->
+      <aside class="summary-card" aria-label="Bill summary">
+        <h2>Bill Summary</h2>
+
+        <dl class="summary-list">
+          <div class="summary-row">
+            <dt>Subtotal</dt>
+            <dd>&#8377;<span data-bill="subtotal">0.00</span></dd>
+          </div>
+          <div class="summary-row summary-discount">
+            <dt>Discount ({{ discount_percent }}%)</dt>
+            <dd>- &#8377;<span data-bill="discount">0.00</span></dd>
+          </div>
+          <div class="summary-row">
+            <dt>Tax ({{ tax_percent }}%)</dt>
+            <dd>&#8377;<span data-bill="tax">0.00</span></dd>
+          </div>
+          <div class="summary-row summary-total">
+            <dt>Total Payable</dt>
+            <dd>&#8377;<span data-bill="final_total">0.00</span></dd>
+          </div>
+        </dl>
+
+        <!-- Tells the customer how much more is needed for the discount -->
+        <p class="discount-hint" data-discount-hint></p>
+
+        <a href="{{ url_for('checkout') }}" class="btn btn-primary btn-block">Proceed to Checkout</a>
+        <p class="summary-note">
+          Your cart is stored only in this browser and is temporary.
+          The discount applies when the subtotal reaches &#8377;{{ min_discount_amount }}.
+        </p>
+      </aside>
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}
